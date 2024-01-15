@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ваш Заголовок</title>
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- <script>
+        // Функция для показа ошибки
+        function showError(message) {
+            var errorBox = document.getElementById("error-box");
+            errorBox.style.display = "block"; // Отобразить мини-окно с ошибкой
+            errorBox.textContent = message; // Установить текст ошибки
+        }
+    </script> -->
+    <!-- <script>
+      // Получаем элементы из DOM
+      var errorPopup = document.getElementById("errorPopup");
+
+      // Покажем попап с ошибкой
+      function showError(message) {
+        var errorMessage = document.getElementById("errorMessage");
+        errorMessage.textContent = message;
+        errorPopup.style.display = "block";
+      }
+
+      // Скроем попап по клику вне него
+      window.addEventListener("click", function (event) {
+        if (event.target !== errorPopup && !errorPopup.contains(event.target)) {
+          errorPopup.style.display = "none";
+        }
+      });
+    </script> -->
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="title">Music online</h1>
+    </header>
+    <section class="content">
+      <div class="container music-container">
+        <div class="music-content">
+          <h2>Список музыки</h2>
+          <ul>
+            {% for music_file in music_files %}
+            <div style="solid #313030; margin-bottom: 15px">
+              <h3 style="margin-left: 20px">{{ music_file }}</h3>
+              <audio controls>
+                <source
+                  src="/media/audio_files/{{ music_file }}"
+                  type="audio/mpeg"
+                />
+                <source
+                  src="/media/audio_files/{{ music_file }}"
+                  type="audio/ogg"
+                />
+                <source
+                  src="/media/audio_files/{{ music_file }}"
+                  type="audio/wav"
+                />
+              </audio>
+            </div>
+            <div class="line"></div>
+            {% endfor %}
+          </ul>
+
+          <form
+            method="post"
+            enctype="multipart/form-data"
+            action="{% url 'upload_files' %}"
+            class="music-form"
+          >
+            {% csrf_token %} {{ form.audio_file }}
+            <label class="file-label">
+              <span class="file-span">Файл не выбран</span>
+              <input type="file" class="file-input" name="audio_file" />
+            </label>
+            <button class="button">Отправить</button>
+            {% if messages %}
+            <div id="error-box">
+              <p>{% for message in messages %} {{message}} {%endfor%}</p>
+              <button class="button" type="button" onclick="closeErrorBox()">
+                close
+              </button>
+            </div>
+            {% endif %}
+          </form>
+        </div>
+
+        <div id="current-music">
+          <h2>Текущая музыка</h2>
+          <!-- Информация о текущей музыке -->
+        </div>
+      </div>
+    </section>
+    <footer id="footer">
+      <p>Music online</p>
+    </footer>
+
+    <script>
+      const fileLabel = document.querySelector(".file-span");
+      const fileInput = document.querySelector(".file-input");
+
+      fileInput.addEventListener("change", (e) => {
+        fileLabel.textContent =
+          e.target.files?.length !== 0
+            ? e.target.files[0].name
+            : "Файл не выбран";
+      });
+
+      const closeErrorBox = () => {
+        const errorBox = document.querySelector("#error-box");
+        errorBox.style.display = "none";
+      };
+
+      // console.log(fileInput);
+    </script>
+  </body>
+</html>

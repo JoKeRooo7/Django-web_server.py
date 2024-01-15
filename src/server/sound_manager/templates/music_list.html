@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Список музыки</title>
+  </head>
+  <body>
+    <h1>Список музыкальных файлов</h1>
+    <ul>
+      {% for music_file in music_files %}
+      <li>{{ music_file }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
